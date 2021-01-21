@@ -31,10 +31,10 @@ Finally, run the python script doing something like `py generate.py`.
 ### Students File
 Files follow this format, where each line corresponds to a student
 ```
-{First Name},{Last Name},{Section_ID}
-Bradd,Pitt,ClassA
-Tom,Cruise,ClassB
-Angelina,Jolie,ClassB
+{First Name},{Last Name},{CS_ID}, {Section_ID}
+Bradd,Pitt, a0a0a, ClassA
+Tom,Cruise, b0b0b, ClassB
+Angelina,Jolie,c0c0c, ClassB
 ```
 
 ### Grading File
