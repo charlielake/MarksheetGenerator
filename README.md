@@ -15,7 +15,7 @@ The solution I came up with was this, using CSVs it is possible to describe the 
 You must create files the describe the marksheets you wish to generate.  
 
 There are three main files you need to have:
-* Students
+* Students (Roster)
 * Grading (Rubric)
 * Sections (Partion)
 
@@ -27,11 +27,15 @@ After this, you can edit the flags and constants in the python script.
 
 Finally, run the python script doing something like `py generate.py`.
 
+### CSID Option
+
+When the classlist with CSIDs are released, use the `-c` or `--csid` option to include them in your marksheet.
+
 ## File formats
 ### Students File
 Files follow this format, where each line corresponds to a student
 ```
-{First Name},{Last Name},{CS_ID}, {Section_ID}
+{First Name},{Last Name},{(optional)CS_ID}, {Section_ID}
 Bradd,Pitt, a0a0a, ClassA
 Tom,Cruise, b0b0b, ClassB
 Angelina,Jolie,c0c0c, ClassB

@@ -12,7 +12,6 @@ HEAVY_ROW_MODIFIER = 5
 
 # File Path to descriptions
 STUDENT_FILE_PATH = "./data/students.csv"
-STUDENT_CSID_FILE_PATH = "./data/csid.csv"
 GRADING_FILE_PATH = "./data/grading.csv"
 SECTION_FILE_PATH = "./data/sections.csv"
 
@@ -141,19 +140,16 @@ def add_student_info(input_string):
         return
     values = input_string.split(",")
     
-    if CS_ID:
-        temp = 4
-    else:
-        temp = 3
-
-    if len(values) != temp:
+    temp = len(values)
+    if temp != 4 and temp != 3:
         print("Error parsing: " + input_string)
         return
 
     values = list(map(lambda x: x.replace("\n", ""), values))
     values = list(map(lambda x: x.replace("\r", ""), values))
+
     temp = temp - 1
-    student_info = values[0:temp]
+    student_info = values[0:(temp)]
     student_array = GLOBAL_STUDENTS.get(values[temp])
     if student_array is None:
         student_array = [student_info]
@@ -167,7 +163,6 @@ def add_grading_info(input_string):
     """Adds grading scheme to global map, based on input_string
     String format is csv where: {Grading_ID}, [{grading_1}, {grading_2}, ...]"""
     if input_string.startswith("#"):
-        # print("skipped: " + input_string)
         return
     values = input_string.split(",")
     if len(values) == 0:
@@ -180,10 +175,9 @@ def add_section_info(input_string):
     """Adds section info, to generate extra information in the headers
     String format is csv where: {SectionName},{LeftText},{CenterText},{RightText}"""
     if input_string.startswith("#"):
-        # print("skipped: " + input_string)
         return
     values = input_string.split(",")
-    if len(values) != 4:
+    if len(values) != 4 and len(values) != 3:
         print("Error parsing: " + input_string)
         return
     section_info = values[1:]
@@ -217,10 +211,7 @@ if __name__ == '__main__':
     
     read_grading_file(GRADING_FILE_PATH)
     read_section_file(SECTION_FILE_PATH)
-    if CS_ID:
-        read_student_file(STUDENT_CSID_FILE_PATH)
-    else:
-        read_student_file(STUDENT_FILE_PATH)
+    read_student_file(STUDENT_FILE_PATH)
 
     if DUPLICATE_FLAG:
         generate_count = MARKSHEET_COUNT
