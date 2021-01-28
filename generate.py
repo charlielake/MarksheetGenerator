@@ -1,5 +1,6 @@
 import xlsxwriter
 import collections
+from argparse import ArgumentParser
 
 # Global Values
 GLOBAL_STUDENTS = {}
@@ -18,6 +19,7 @@ SECTION_FILE_PATH = "./data/sections.csv"
 PADDING_FLAG = False
 DUPLICATE_FLAG = False
 MARKSHEET_COUNT = 2
+CS_ID = False
 
 # Workbook generator
 def generate_workbook(name):
@@ -195,6 +197,14 @@ if __name__ == '__main__':
         generate_count = MARKSHEET_COUNT
     else:
         generate_count = 1
+
+    parser = ArgumentParser(description="Generate 121 Lab Marksheets.")
+    parser.add_argument("-c", "--csid", help="Include CSIDs in the marksheets", action="store_true")
+    args = parser.parse_args()
+    CS_ID = args.csid
+    if CS_ID:
+        print(CS_ID)
+        print("CS IDs are going to get included")
 
     for grading_scheme in GLOBAL_GRADING:
         workbook = generate_workbook(grading_scheme)
