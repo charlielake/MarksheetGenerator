@@ -18,8 +18,10 @@ SECTION_FILE_PATH = "./data/sections.csv"
 # Set both flags to true for PDF Batch DUPLEX Printing
 PADDING_FLAG = False
 DUPLICATE_FLAG = False
+
 MARKSHEET_COUNT = 2
 CS_ID = False
+lab_id = 0
 
 # Workbook generator
 def generate_workbook(name):
@@ -183,6 +185,23 @@ def add_section_info(input_string):
     section_info = values[1:]
     GLOBAL_SECTIONS[values[0]] = section_info
 
+def generate_lab_section(workbook, grading_scheme):
+    """Generates lab marksheet for one specific lab section"""
+    for section_id in GLOBAL_SECTIONS:
+        for x in range(0, generate_count):
+            if DUPLICATE_FLAG:
+                worksheet = workbook.add_worksheet(section_id + str(x))
+            else:
+                worksheet = workbook.add_worksheet(section_id)
+            setup_worksheet(worksheet, section_id)
+            setup_grading_columns(workbook, worksheet, grading_scheme, section_id)
+            setup_student_names(workbook, worksheet, grading_scheme, section_id)
+            if PADDING_FLAG:
+                # Add extra white pages for PDF duplex printing
+                padding_sheet = workbook.add_worksheet()
+                padding_sheet.write(0, 0, " ")
+                padding_sheet.set_landscape()
+    return workbook
 
 def read_section_file(path):
     f = open(path, 'r')
@@ -206,8 +225,12 @@ def read_grading_file(path):
 if __name__ == '__main__':
     parser = ArgumentParser(description="Generate 121 Lab Marksheets.")
     parser.add_argument("-c", "--csid", help="Include CSIDs in the marksheets", action="store_true")
+    parser.add_argument("-l", "--lab", type=int, help="Generate one specific lab", default=0)
+    
     args = parser.parse_args()
+
     CS_ID = args.csid
+    lab_id = "Lab "+str(args.lab)
     
     read_grading_file(GRADING_FILE_PATH)
     read_section_file(SECTION_FILE_PATH)
@@ -218,20 +241,19 @@ if __name__ == '__main__':
     else:
         generate_count = 1
 
-    for grading_scheme in GLOBAL_GRADING:
-        workbook = generate_workbook(grading_scheme)
-        for section_id in GLOBAL_SECTIONS:
-            for x in range(0, generate_count):
-                if DUPLICATE_FLAG:
-                    worksheet = workbook.add_worksheet(section_id + str(x))
-                else:
-                    worksheet = workbook.add_worksheet(section_id)
-                setup_worksheet(worksheet, section_id)
-                setup_grading_columns(workbook, worksheet, grading_scheme, section_id)
-                setup_student_names(workbook, worksheet, grading_scheme, section_id)
-                if PADDING_FLAG:
-                    # Add extra white pages for PDF duplex printing
-                    padding_sheet = workbook.add_worksheet()
-                    padding_sheet.write(0, 0, " ")
-                    padding_sheet.set_landscape()
-        workbook.close()
+    if lab_id == "Lab 0": 
+        for grading_scheme in GLOBAL_GRADING:
+            workbook = generate_workbook(grading_scheme)
+            workbook = generate_lab_section(workbook, grading_scheme)
+            try:
+                workbook.close()
+            except:
+                print("Error accessing file, try closing "+grading_scheme+".xlsx")
+
+    else:
+        workbook = generate_workbook(lab_id)
+        workbook = generate_lab_section(workbook, lab_id)
+        try:
+            workbook.close()
+        except:
+            print("Error accessing file, try closing "+lab_id+".xlsx")
