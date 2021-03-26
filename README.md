@@ -27,9 +27,11 @@ After this, you can edit the flags and constants in the python script.
 
 Finally, run the python script doing something like `py generate.py`.
 
-### CSID Option
+### Arguments
 
-When the classlist with CSIDs are released, use the `-c` or `--csid` option to include them in your marksheet.
+* When the classlist with CSIDs are released, use the `-c` or `--csid` option to include them in your marksheet.
+
+* If you only need to generate marksheets for one specific lab section, use the `-l #` or `--lab #` option.
 
 ## File formats
 ### Students File
