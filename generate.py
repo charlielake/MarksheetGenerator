@@ -20,7 +20,7 @@ PADDING_FLAG = False
 DUPLICATE_FLAG = False
 
 MARKSHEET_COUNT = 2
-CS_ID = False
+CWL = False
 lab_id = 0
 
 # Workbook generator
@@ -68,8 +68,8 @@ def setup_grading_columns(workbook, worksheet, grading_id, section_id):
     worksheet.write(1, 0, "First Name", merged_cell)
     worksheet.write(1, 1, "Last Name", merged_cell)
 
-    if CS_ID:
-        worksheet.write(1, 2, "CSID", merged_cell)
+    if CWL:
+        worksheet.write(1, 2, "CWL", merged_cell)
         cur_pos = 3
     else:
         cur_pos = 2
@@ -101,7 +101,8 @@ def setup_student_names(workbook, worksheet, grading_id, section_id):
         student_count = 0
         row_count = 2
         
-        if CS_ID:
+        global CWL 
+        if CWL:
             temp = 3
         else:
             temp = 2
@@ -111,22 +112,22 @@ def setup_student_names(workbook, worksheet, grading_id, section_id):
             student_count = (student_count + 1) % HEAVY_ROW_MODIFIER
             first_name  = student[0]
             last_name   = student[1]
-            if CS_ID:
-                cs_id = student[2]
+            if CWL:
+                CWL = student[2]
             if student_count == 0:
                 if grading is not None and len(grading) > 0:
                     worksheet.write(row_count, 0, first_name, heavy_bottom)
                     worksheet.write(row_count, 1, last_name, heavy_bottom)
-                    if CS_ID:
-                        worksheet.write(row_count, 2, cs_id, heavy_bottom)
+                    if CWL:
+                        worksheet.write(row_count, 2, CWL, heavy_bottom)
                     
                     for x in range(len(grading)):
                         worksheet.write_blank(row_count, x + temp, None, heavy_bottom)
             else:
                 worksheet.write(row_count, 0, first_name)
                 worksheet.write(row_count, 1, last_name)
-                if CS_ID:
-                    worksheet.write(row_count, 2, cs_id)
+                if CWL:
+                    worksheet.write(row_count, 2, CWL)
             
             row_count = row_count + 1
     else:
@@ -136,7 +137,7 @@ def setup_student_names(workbook, worksheet, grading_id, section_id):
 
 def add_student_info(input_string):
     """Adds student to global map, based on input_string
-    String format is csv where: {FirstName}, {LastName}, {-csid}, {Section/Division}"""
+    String format is csv where: {FirstName}, {LastName}, {-cwl}, {Section/Division}"""
     if input_string.startswith("#"):
         # print("skipped: " + input_string)
         return
@@ -241,13 +242,13 @@ def read_grading_file(path):
 
 if __name__ == '__main__':
     parser = ArgumentParser(description="Generate 121 Lab Marksheets.")
-    parser.add_argument("-c", "--csid", help="Include CSIDs in the marksheets", action="store_true")
+    parser.add_argument("-c", "--cwl", help="Include CWLs in the marksheets", action="store_true")
     parser.add_argument("-l", "--lab", type=int, help="Generate one specific lab.", default=0)
     parser.add_argument("-n", "--num", help = "If True, this script will generate files organized by Lab Number (Lab 1-9), with sections found within. If False (default), this script will generate files organized by lab section (with each Lab 1-9 as sheets within).", action= "store_true")
     
     args = parser.parse_args()
 
-    CS_ID = args.csid
+    CWL = args.cwl
     lab_id = "Lab "+str(args.lab)
     num = args.num
     
