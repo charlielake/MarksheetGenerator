@@ -160,7 +160,6 @@ def add_student_info(input_string):
 
     GLOBAL_STUDENTS[values[temp]] = student_array
 
-
 def add_grading_info(input_string):
     """Adds grading scheme to global map, based on input_string
     String format is csv where: {Grading_ID}, [{grading_1}, {grading_2}, ...]"""
@@ -226,11 +225,18 @@ if __name__ == '__main__':
     parser = ArgumentParser(description="Generate 121 Lab Marksheets.")
     parser.add_argument("-c", "--csid", help="Include CSIDs in the marksheets", action="store_true")
     parser.add_argument("-l", "--lab", type=int, help="Generate one specific lab", default=0)
+    parser.add_argument("-f", "--flip", help = "If 1, this script will generate files organized by lab section (with each Lab 1-9 as sheets within). If 0, it will generate files organized by Lab (Lab 1-9), with sections found within.", action= "store_true")
     
     args = parser.parse_args()
 
     CS_ID = args.csid
     lab_id = "Lab "+str(args.lab)
+    flip = args.flip
+
+    print(flip)
+    print(CS_ID)
+    print(lab_id)
+
     
     read_grading_file(GRADING_FILE_PATH)
     read_section_file(SECTION_FILE_PATH)
@@ -257,3 +263,5 @@ if __name__ == '__main__':
             workbook.close()
         except:
             print("Error accessing file, try closing "+lab_id+".xlsx")
+
+    print("Generating Marksheets Complete!")
