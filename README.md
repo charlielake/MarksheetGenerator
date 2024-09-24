@@ -47,7 +47,7 @@ Angelina,Jolie,c0c0c, ClassB
 Files follow this format, where each line corresponds to a grading rubric
 ```
 {Grading_ID}, {Column_1}, {Column_2}, {Column_3}, {Column_4}, {Column_5}, {Column_6}, ...
-Marksheet 1, Todo 1, Todo 2, Checkpoint
+Marksheet 1, Todo 1, Todo 2, etc...
 Marksheet 2, Todo 1, Todo 2, Todo 3, Final
 ```
 
@@ -59,6 +59,8 @@ ClassA,,Monday,10-12
 ClassB,,Wednesday,13-15
 ClassC,,,
 ```
+
+As of right now (to be fixed!), all columns need to have *something*. If you don't want anything, enter in a whitespace in the cells of that column.
 
 ## Disclaimer
 No warranty is provided when using this software, though I don't see what can go wrong...
