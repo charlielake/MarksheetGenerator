@@ -184,8 +184,8 @@ def add_section_info(input_string):
     section_info = values[1:]
     GLOBAL_SECTIONS[values[0]] = section_info
 
-def generate_lab_section(workbook, grading_scheme):
-    """Generates lab marksheet for one specific lab section"""
+def generate_sheets_lab(workbook, grading_scheme):
+    """Generates lab marksheet based on lab (i.e., all sections L1A-L14 will be in a sheet for Lab 1) for one workbook"""
     for section_id in GLOBAL_SECTIONS:
         for x in range(0, generate_count):
             if DUPLICATE_FLAG:
@@ -195,6 +195,24 @@ def generate_lab_section(workbook, grading_scheme):
             setup_worksheet(worksheet, section_id)
             setup_grading_columns(workbook, worksheet, grading_scheme, section_id)
             setup_student_names(workbook, worksheet, grading_scheme, section_id)
+            if PADDING_FLAG:
+                # Add extra white pages for PDF duplex printing
+                padding_sheet = workbook.add_worksheet()
+                padding_sheet.write(0, 0, " ")
+                padding_sheet.set_landscape()
+    return workbook
+
+def generate_sheets_section(workbook, lab_section):
+    """Generates lab marksheets based on lab section (i.e., all labs 1-9 will be in a sheet for L1K) for one workbook"""
+    for grading_scheme in GLOBAL_GRADING:
+        for x in range(0, generate_count):
+            if DUPLICATE_FLAG:
+                worksheet = workbook.add_worksheet(grading_scheme + str(x))
+            else:
+                worksheet = workbook.add_worksheet(grading_scheme)
+            setup_worksheet(worksheet, lab_section)
+            setup_grading_columns(workbook, worksheet, grading_scheme, lab_section)   
+            setup_student_names(workbook, worksheet, grading_scheme, lab_section)
             if PADDING_FLAG:
                 # Add extra white pages for PDF duplex printing
                 padding_sheet = workbook.add_worksheet()
@@ -224,19 +242,14 @@ def read_grading_file(path):
 if __name__ == '__main__':
     parser = ArgumentParser(description="Generate 121 Lab Marksheets.")
     parser.add_argument("-c", "--csid", help="Include CSIDs in the marksheets", action="store_true")
-    parser.add_argument("-l", "--lab", type=int, help="Generate one specific lab", default=0)
-    parser.add_argument("-f", "--flip", help = "If 1, this script will generate files organized by lab section (with each Lab 1-9 as sheets within). If 0, it will generate files organized by Lab (Lab 1-9), with sections found within.", action= "store_true")
+    parser.add_argument("-l", "--lab", type=int, help="Generate one specific lab.", default=0)
+    parser.add_argument("-n", "--num", help = "If True, this script will generate files organized by Lab Number (Lab 1-9), with sections found within. If False (default), this script will generate files organized by lab section (with each Lab 1-9 as sheets within).", action= "store_true")
     
     args = parser.parse_args()
 
     CS_ID = args.csid
     lab_id = "Lab "+str(args.lab)
-    flip = args.flip
-
-    print(flip)
-    print(CS_ID)
-    print(lab_id)
-
+    num = args.num
     
     read_grading_file(GRADING_FILE_PATH)
     read_section_file(SECTION_FILE_PATH)
@@ -247,21 +260,33 @@ if __name__ == '__main__':
     else:
         generate_count = 1
 
-    if lab_id == "Lab 0": 
-        for grading_scheme in GLOBAL_GRADING:
-            workbook = generate_workbook(grading_scheme)
-            workbook = generate_lab_section(workbook, grading_scheme)
+    """Case num = True: Generate marksheets based on Lab Number (all sections within a marksheet for Lab 1, etc...)"""
+    if num:
+        if lab_id == "Lab 0": 
+            for grading_scheme in GLOBAL_GRADING:
+                workbook = generate_workbook(grading_scheme)
+                workbook = generate_sheets_lab(workbook, grading_scheme)
+                try:
+                    workbook.close()
+                except:
+                    print("Error accessing file, try closing "+grading_scheme+".xlsx")
+
+        else:
+            workbook = generate_workbook(lab_id)
+            workbook = generate_sheets_lab(workbook, lab_id)
             try:
                 workbook.close()
             except:
-                print("Error accessing file, try closing "+grading_scheme+".xlsx")
+                print("Error accessing file, try closing "+lab_id+".xlsx")
 
+        """(DEFAULT) Case num = False: Generate marksheets based on Lab Number (all sections within a marksheet for Lab 1, etc...)"""
     else:
-        workbook = generate_workbook(lab_id)
-        workbook = generate_lab_section(workbook, lab_id)
-        try:
-            workbook.close()
-        except:
-            print("Error accessing file, try closing "+lab_id+".xlsx")
+        for lab_section in GLOBAL_SECTIONS:
+            workbook = generate_workbook(lab_section)
+            workbook = generate_sheets_section(workbook, lab_section)
+            try:
+                workbook.close()
+            except:
+                print("Error accessing file, try closing "+lab_section+".xlsx")
 
     print("Generating Marksheets Complete!")
