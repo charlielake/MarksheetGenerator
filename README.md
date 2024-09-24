@@ -66,7 +66,3 @@ This software is provided "*AS IS*", and I am _not_ responsible for any damages 
 
 ## Troubleshooting
 If you notice that seemingly random special characters appear in your marksheets, open all your data files in a text editor like Notepad++ and change encoding to UTF-8 rather than UTF-8 BOM. The "BOM" leads to it having special characters denoting the beginning/end of the file.
-
-## TODO:
-- Flip to make it generate section first, with labs within
-- Make it more robust to including/excluding header info
