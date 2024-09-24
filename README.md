@@ -29,9 +29,11 @@ Finally, run the python script doing something like `py generate.py`.
 
 ### Arguments
 
-* When the classlist with CSIDs are released, use the `-c` or `--csid` option to include them in your marksheet.
+* When the classlist with CWLs are released, use the `-c` or `--cwl` option to include them in your marksheet.
 
 * If you only need to generate marksheets for one specific lab section, use the `-l #` or `--lab #` option.
+
+* If you want to generate marksheets split by Lab (say 9 files Lab 1-9, each with sheets within for sections), use the '-n' or '--num" option. If excluded (default), it'll generate marksheets according to section (with Lab 1-9 subsheets found inside).
 
 ## File formats
 ### Students File
