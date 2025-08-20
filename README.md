@@ -21,7 +21,7 @@ There are three main files you need to have:
 
 Each file has a slightly different format, but they are all CSVs.
 
-Install the needed libraries by running `pip install -r requirements.txt`.
+Install the needed libraries by running `pip install -r requirements.txt` on the Command Line.
 
 After this, you can edit the flags and constants in the python script.
 
@@ -70,4 +70,5 @@ This software is provided "*AS IS*", and I am _not_ responsible for any damages 
 
 ## Troubleshooting
 If you notice that seemingly random special characters appear in your marksheets, open all your data files in a text editor like Notepad++ and change encoding to UTF-8 rather than UTF-8 BOM. The "BOM" leads to it having special characters denoting the beginning/end of the file.
+
 
