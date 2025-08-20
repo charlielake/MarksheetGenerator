@@ -17,7 +17,7 @@ You must create files the describe the marksheets you wish to generate.
 There are three main files you need to have:
 * Students (Roster)
 * Grading (Rubric)
-* Sections (Partion)
+* Sections (Partition)
 
 Each file has a slightly different format, but they are all CSVs.
 
@@ -70,3 +70,4 @@ This software is provided "*AS IS*", and I am _not_ responsible for any damages 
 
 ## Troubleshooting
 If you notice that seemingly random special characters appear in your marksheets, open all your data files in a text editor like Notepad++ and change encoding to UTF-8 rather than UTF-8 BOM. The "BOM" leads to it having special characters denoting the beginning/end of the file.
+
